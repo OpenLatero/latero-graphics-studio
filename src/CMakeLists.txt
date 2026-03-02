@@ -1,15 +1,8 @@
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "--std=gnu++11 -fpermissive ${CMAKE_CXX_FLAGS}")
 
-
-# todo: added manually - should it be necessary or already set up by latero-graphics?
+find_package(Boost REQUIRED COMPONENTS program_options)
 find_package(laterographics)
-
-include(FindPkgConfig)
-pkg_check_modules(DEPS REQUIRED gtkmm-2.4)
-link_directories(${DEPS_LIBRARY_DIRS})
-include_directories(${DEPS_INCLUDE_DIRS})
-
 
 set(studio_SRCS
     mainwindow.h
@@ -19,5 +12,5 @@ set(studio_SRCS
     managerwidget.cpp)
 
 add_executable(latero-studio ${studio_SRCS})
-target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} laterographics::laterographics boost_program_options-mt)
+target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} laterographics::laterographics Boost::program_options)
 install_programs(/bin latero-studio)
