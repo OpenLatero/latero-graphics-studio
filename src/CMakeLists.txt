@@ -1,18 +1,15 @@
-include(FindPkgConfig)
-
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "--std=gnu++11 -fpermissive ${CMAKE_CXX_FLAGS}")
 
-# add /usr/loca/lib/pkgconfig (necessary on macOS)
-set( ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig" )
 
 # todo: added manually - should it be necessary or already set up by latero-graphics?
-find_package(Boost CONFIG COMPONENTS system thread filesystem REQUIRED)
-find_package(latero)
+find_package(laterographics)
 
-pkg_check_modules (LATERO_GRAPHICS latero-graphics)
-link_directories(${LATERO_GRAPHICS_LIBRARY_DIRS})
-include_directories(${LATERO_GRAPHICS_INCLUDE_DIRS})
+include(FindPkgConfig)
+pkg_check_modules(DEPS REQUIRED gtkmm-2.4)
+link_directories(${DEPS_LIBRARY_DIRS})
+include_directories(${DEPS_INCLUDE_DIRS})
+
 
 set(studio_SRCS
     mainwindow.h
@@ -22,5 +19,5 @@ set(studio_SRCS
     managerwidget.cpp)
 
 add_executable(latero-studio ${studio_SRCS})
-target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} latero::latero boost_program_options-mt)
+target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} laterographics::laterographics boost_program_options-mt)
 install_programs(/bin latero-studio)
