@@ -8,6 +8,7 @@ set( ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:/usr/local/lib/pkgconfig" )
 
 # todo: added manually - should it be necessary or already set up by latero-graphics?
 find_package(Boost CONFIG COMPONENTS system thread filesystem REQUIRED)
+find_package(latero)
 
 pkg_check_modules (LATERO_GRAPHICS latero-graphics)
 link_directories(${LATERO_GRAPHICS_LIBRARY_DIRS})
@@ -21,5 +22,5 @@ set(studio_SRCS
     managerwidget.cpp)
 
 add_executable(latero-studio ${studio_SRCS})
-target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} boost_program_options-mt)
+target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} latero::latero boost_program_options-mt)
 install_programs(/bin latero-studio)
