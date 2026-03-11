@@ -21,7 +21,7 @@ protected:
 	bool OnKeyPress(GdkEventKey* event);
 	void AddGenerator(latero::graphics::GeneratorPtr gen);
 	void UpdateCurrentGenerator();
-	void OnPageSwitch(GtkNotebookPage* page, guint idx);
+	void OnPageSwitch(Gtk::Widget* page, guint page_num);
 
 	Gtk::Notebook notebook_;
 	latero::graphics::VirtualSurfaceWidget preview_;
