@@ -1,6 +1,5 @@
 #include <iostream>
-//#include <sys/mman.h>
-#include <gtkmm/main.h>
+#include <gtkmm/application.h>
 #include "mainwindow.h"
 #include <laterographics/tactileengine.h>
 #include <laterographics/audioengine.h>
@@ -50,14 +49,14 @@ int main(int argc, char *argv[])
 	if (!disableAudio) aEngine.Start();
 
 	std::cout << "Creating GUI thread...\n";
-	Gtk::Main kit(argc, argv);
+	auto app = Gtk::Application::create(argc, argv, "org.openlatero.latero-graphics-studio");
 	latero::graphics::GeneratorPtr gen;
 	if (filename=="")
 		gen = latero::graphics::Canvas::Create(&dev);
 	else
 		gen = latero::graphics::Generator::Create(filename,&dev);
 	MainWindow wnd(&tEngine, &aEngine, gen);
-	Gtk::Main::run(wnd);
+	app->run(wnd);
 
 	std::cout << "Stopping engines...\n";
 	tEngine.Stop();
