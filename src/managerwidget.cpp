@@ -16,7 +16,9 @@ ManagerWidget::ManagerWidget(latero::graphics::TactileEngine *tEngine, latero::g
 	exp->set_expanded(true);
 	add(*box);
 	box->pack_start(preview_);
-	box->pack_start(*exp, Gtk::PACK_SHRINK);
+	box->pack_start(*exp, false, false);
+	exp->set_vexpand(false);
+
 	exp->add(notebook_);
 	show_all_children();
 
