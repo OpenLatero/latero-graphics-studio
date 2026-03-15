@@ -14,3 +14,5 @@ set(studio_SRCS
 add_executable(latero-studio ${studio_SRCS})
 target_link_libraries(latero-studio ${LATERO_GRAPHICS_LIBRARIES} laterographics::laterographics Boost::program_options)
 install_programs(/bin latero-studio)
+
+#target_compile_definitions(latero-studio PRIVATE GDK_DISABLE_DEPRECATED GTK_DISABLE_DEPRECATED GTKMM_DISABLE_DEPRECATED)
