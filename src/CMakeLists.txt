@@ -1,5 +1,5 @@
-set (CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_FLAGS "--std=gnu++11 -fpermissive ${CMAKE_CXX_FLAGS}")
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_FLAGS "--std=gnu++17 -fpermissive ${CMAKE_CXX_FLAGS}")
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 find_package(laterographics)

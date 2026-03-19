@@ -49,18 +49,17 @@ int main(int argc, char *argv[])
 	if (!disableAudio) aEngine.Start();
 
 	std::cout << "Creating GUI thread...\n";
-	auto app = Gtk::Application::create(argc, argv, "org.openlatero.latero-graphics-studio");
+	auto app = Gtk::Application::create("org.openlatero.latero-graphics-studio");
 	latero::graphics::GeneratorPtr gen;
 	if (filename=="")
 		gen = latero::graphics::Canvas::Create(&dev);
 	else
 		gen = latero::graphics::Generator::Create(filename,&dev);
-	MainWindow wnd(&tEngine, &aEngine, gen);
-	app->run(wnd);
+	int result = app->make_window_and_run<MainWindow>(argc, argv, &tEngine, &aEngine, gen);
 
 	std::cout << "Stopping engines...\n";
 	tEngine.Stop();
 	aEngine.Stop();
 
-	return 0;
+	return result;
 }

@@ -6,17 +6,16 @@ MainWindow::MainWindow(latero::graphics::TactileEngine *tEngine, latero::graphic
 	managerWidget_(tEngine, aEngine,gen)
 {
 	set_title("STReSS2 Tactile Graphics Studio");
-	set_border_width(10);
 	set_size_request(1000,800);
 
-	auto box = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
+	auto box = Gtk::manage(new Gtk::Box(Gtk::Orientation::VERTICAL));
 
-	add(*manage(box));
-	box->pack_start(*manage(CreateMenu()), Gtk::PACK_SHRINK);
-	box->pack_start(managerWidget_);
+	set_child(*box);
+	box->append(*manage(CreateMenu()));
+	box->append(managerWidget_);
+	managerWidget_.set_expand(true);
 
 	maximize();
-	show_all_children();
 }
 
 Gtk::Widget *MainWindow::CreateMenu()
@@ -53,8 +52,8 @@ Gtk::Widget *MainWindow::CreateMenu()
 	)");
 
 	// Get the menu model and create a MenuBar from it
-	auto menu_model = Glib::RefPtr<Gio::Menu>::cast_dynamic(builder->get_object("MenuBar"));
-	auto menubar = Gtk::manage(new Gtk::MenuBar(menu_model));
+	auto menu_model = std::dynamic_pointer_cast<Gio::Menu>(builder->get_object("MenuBar"));
+	auto menubar = Gtk::manage(new Gtk::PopoverMenuBar(menu_model));
 	return menubar;
 }
 

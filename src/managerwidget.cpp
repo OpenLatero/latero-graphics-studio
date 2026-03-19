@@ -11,26 +11,26 @@ ManagerWidget::ManagerWidget(latero::graphics::TactileEngine *tEngine, latero::g
 	aEngine_(aEngine)
 {
 	preview_.ShowCursor();
-	auto box = manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+	auto box = manage(new Gtk::Box(Gtk::Orientation::VERTICAL));
 	Gtk::Expander *exp = manage(new Gtk::Expander("settings"));
 	exp->set_expanded(true);
-	add(*box);
-	box->pack_start(preview_);
-	box->pack_start(*exp, false, false);
+	set_child(*box);
+	box->append(preview_);
+	preview_.set_expand(true);
+	box->append(*exp);
 	exp->set_vexpand(false);
 
-	exp->add(notebook_);
-	show_all_children();
+	exp->set_child(notebook_);
 
 	notebook_.signal_switch_page().connect(
 		sigc::mem_fun(*this,&ManagerWidget::OnPageSwitch));
 
 	AddGenerator(gen);
 
-	signal_key_press_event().connect(
-		sigc::mem_fun(*this, &ManagerWidget::OnKeyPress));
-
-
+	auto controller = Gtk::EventControllerKey::create();
+	controller->signal_key_pressed().connect(
+		sigc::mem_fun(*this, &ManagerWidget::OnKeyPress), false);
+	add_controller(controller);
 };
 
 void ManagerWidget::OnPageSwitch(Gtk::Widget* page, guint page_num)
@@ -40,22 +40,17 @@ void ManagerWidget::OnPageSwitch(Gtk::Widget* page, guint page_num)
 
 void ManagerWidget::Save()
 {
-	Gtk::FileChooserDialog dialog("Please select a generator file.", Gtk::FILE_CHOOSER_ACTION_SAVE);
+	auto dialog = Gtk::FileDialog::create();
+	dialog->set_title("Please select a generator file.");
+	dialog->set_initial_name("card.gen");
 
-	std::string dir = Glib::get_current_dir();
- 
-	dir += "/cards"; // TODO
-	dialog.set_current_folder(dir);
-	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Save", Gtk::RESPONSE_OK);
-	dialog.set_default_response(Gtk::RESPONSE_CANCEL);
-	dialog.set_current_name("card.gen");
-
-	if (Gtk::RESPONSE_OK == dialog.run())		
-	{
-		std::string filename = dialog.get_filename();
-		if (currentGen_) currentGen_->SaveToFile(dialog.get_filename());
-	}
+	auto window = dynamic_cast<Gtk::Window*>(get_root());
+	dialog->save(*window, [this, dialog](Glib::RefPtr<Gio::AsyncResult>& result) {
+		try {
+			auto file = dialog->save_finish(result);
+			if (currentGen_) currentGen_->SaveToFile(file->get_path());
+		} catch (const Gtk::DialogError&) {}
+	});
 }
 
 void ManagerWidget::Close()
@@ -73,31 +68,28 @@ void ManagerWidget::Close()
 
 void ManagerWidget::Open()
 {
-	Gtk::FileChooserDialog dialog("Please select a generator file.", Gtk::FILE_CHOOSER_ACTION_OPEN);
+	auto dialog = Gtk::FileDialog::create();
+	dialog->set_title("Please select a generator file.");
 
-	Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+	auto filter = Gtk::FileFilter::create();
 	filter->add_pattern("*.gen");
- 
-	std::string dir = Glib::get_current_dir();
-	dir += "/cards"; // TODO
+	auto filters = Gio::ListStore<Gtk::FileFilter>::create();
+	filters->append(filter);
+	dialog->set_filters(filters);
 
-	dialog.set_current_folder(dir);
-	dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Open", Gtk::RESPONSE_OK);
-	dialog.set_default_response(Gtk::RESPONSE_OK);
-	dialog.add_filter(filter);
-
-	if (Gtk::RESPONSE_OK == dialog.run())		
-	{
-		AddGenerator(latero::graphics::Generator::Create(dialog.get_filename(), tEngine_->Dev()));
-	}
+	auto window = dynamic_cast<Gtk::Window*>(get_root());
+	dialog->open(*window, [this, dialog](Glib::RefPtr<Gio::AsyncResult>& result) {
+		try {
+			auto file = dialog->open_finish(result);
+			AddGenerator(latero::graphics::Generator::Create(file->get_path(), tEngine_->Dev()));
+		} catch (const Gtk::DialogError&) {}
+	});
 }
 
 void ManagerWidget::AddGenerator(latero::graphics::GeneratorPtr gen)
 {
 	list_.push_back(gen);
 	int i = notebook_.append_page(*manage(gen->CreateWidget(gen)), "generator");
-	show_all_children();
 	notebook_.set_current_page(i);
 	UpdateCurrentGenerator();
 }
@@ -115,10 +107,10 @@ void ManagerWidget::UpdateCurrentGenerator()
 	aEngine_->SetGenerator(currentGen_);
 }
 
-bool ManagerWidget::OnKeyPress(GdkEventKey* event)
+bool ManagerWidget::OnKeyPress(guint keyval, guint keycode, Gdk::ModifierType state)
 {
-	if (currentGen_) 
-        return currentGen_->OnKeyPress(event);
+	if (currentGen_)
+        return currentGen_->OnKeyPress(keyval, keycode, state);
     else
         return false;
 }
