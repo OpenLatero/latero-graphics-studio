@@ -5,13 +5,10 @@
 MainWindow::MainWindow(latero::graphics::TactileEngine *tEngine, latero::graphics::AudioEngine *aEngine, latero::graphics::GeneratorPtr gen) :
 	managerWidget_(tEngine, aEngine,gen)
 {
-	set_title("STReSS2 Tactile Graphics Studio");
+	set_title("Latero Graphics Studio");
 	set_size_request(1000,800);
 
-	auto box = Gtk::manage(new Gtk::Box(Gtk::Orientation::VERTICAL));
-
-	set_child(*box);
-	box->append(managerWidget_);
+	set_child(managerWidget_);
 	managerWidget_.set_expand(true);
 
 	signal_realize().connect(sigc::mem_fun(*this, &MainWindow::CreateMenu));
