@@ -7,12 +7,8 @@ MainWindow::MainWindow(latero::graphics::TactileEngine *tEngine, latero::graphic
 {
 	set_title("Latero Graphics Studio");
 	set_size_request(1000,800);
-
 	set_child(managerWidget_);
-	managerWidget_.set_expand(true);
-
 	signal_realize().connect(sigc::mem_fun(*this, &MainWindow::CreateMenu));
-
 	maximize();
 }
 
