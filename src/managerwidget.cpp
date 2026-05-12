@@ -11,8 +11,8 @@ ManagerWidget::ManagerWidget(latero::graphics::TactileEngine *tEngine, latero::g
 	aEngine_(aEngine)
 {
 	preview_.ShowCursor();
-	auto box = manage(new Gtk::Box(Gtk::Orientation::VERTICAL));
-	Gtk::Expander *exp = manage(new Gtk::Expander("settings"));
+	auto box = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
+	auto exp = Gtk::make_managed<Gtk::Expander>("settings");
 	exp->set_expanded(true);
 	set_child(*box);
 	box->append(preview_);
