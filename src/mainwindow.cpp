@@ -5,28 +5,19 @@
 MainWindow::MainWindow(latero::graphics::TactileEngine *tEngine, latero::graphics::AudioEngine *aEngine, latero::graphics::GeneratorPtr gen) :
 	managerWidget_(tEngine, aEngine,gen)
 {
-	set_title("STReSS2 Tactile Graphics Studio");
-	set_border_width(10);
+	set_title("Latero Graphics Studio");
 	set_size_request(1000,800);
-
-	auto box = new Gtk::Box(Gtk::ORIENTATION_VERTICAL);
-
-	add(*manage(box));
-	box->pack_start(*manage(CreateMenu()), Gtk::PACK_SHRINK);
-	box->pack_start(managerWidget_);
-
+	set_child(managerWidget_);
+	signal_realize().connect(sigc::mem_fun(*this, &MainWindow::CreateMenu));
 	maximize();
-	show_all_children();
 }
 
-Gtk::Widget *MainWindow::CreateMenu()
+void MainWindow::CreateMenu()
 {
-	// Create action group and add actions
-	auto action_group = Gio::SimpleActionGroup::create();
-	action_group->add_action("open",  sigc::mem_fun(*this, &MainWindow::OnOpen));
-	action_group->add_action("save",  sigc::mem_fun(*this, &MainWindow::OnSave));
-	action_group->add_action("close", sigc::mem_fun(*this, &MainWindow::OnClose));
-	insert_action_group("file", action_group);
+	// Register actions directly on the window so they're accessible as win.*
+	add_action("open",  sigc::mem_fun(*this, &MainWindow::OnOpen));
+	add_action("save",  sigc::mem_fun(*this, &MainWindow::OnSave));
+	add_action("close", sigc::mem_fun(*this, &MainWindow::OnClose));
 
 	// Define the menubar using Builder XML
 	auto builder = Gtk::Builder::create_from_string(R"(
@@ -37,25 +28,25 @@ Gtk::Widget *MainWindow::CreateMenu()
       <attribute name="label">File</attribute>
       <item>
         <attribute name="label">Open</attribute>
-        <attribute name="action">file.open</attribute>
+        <attribute name="action">win.open</attribute>
       </item>
       <item>
         <attribute name="label">Save</attribute>
-        <attribute name="action">file.save</attribute>
+        <attribute name="action">win.save</attribute>
       </item>
       <item>
         <attribute name="label">Close</attribute>
-        <attribute name="action">file.close</attribute>
+        <attribute name="action">win.close</attribute>
       </item>
     </submenu>
   	</menu>
 	</interface>
 	)");
 
-	// Get the menu model and create a MenuBar from it
-	auto menu_model = Glib::RefPtr<Gio::Menu>::cast_dynamic(builder->get_object("MenuBar"));
-	auto menubar = Gtk::manage(new Gtk::MenuBar(menu_model));
-	return menubar;
+	// Let ApplicationWindow manage the menubar natively
+	auto menu_model = std::dynamic_pointer_cast<Gio::Menu>(builder->get_object("MenuBar"));
+	get_application()->set_menubar(menu_model);
+	set_show_menubar(true);
 }
 
 MainWindow::~MainWindow() 

@@ -1,8 +1,6 @@
-#ifndef PIEZO_MANAGER_WIDGET_H
-#define PIEZO_MANAGER_WIDGET_H
+#pragma once
 
-#include <gtkmm/notebook.h>
-#include <gtkmm/frame.h>
+#include <gtkmm.h>
 #include <laterographics/virtualsurfacewidget.h>
 #include <laterographics/tactileengine.h>
 #include <laterographics/audioengine.h>
@@ -18,7 +16,7 @@ public:
 	void Close();
 
 protected:
-	bool OnKeyPress(GdkEventKey* event);
+	bool OnKeyPress(guint keyval, guint keycode, Gdk::ModifierType state);
 	void AddGenerator(latero::graphics::GeneratorPtr gen);
 	void UpdateCurrentGenerator();
 	void OnPageSwitch(Gtk::Widget* page, guint page_num);
@@ -30,5 +28,3 @@ protected:
 	std::vector<latero::graphics::GeneratorPtr> list_;
 	latero::graphics::GeneratorPtr currentGen_;
 };
-
-#endif
