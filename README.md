@@ -1,5 +1,5 @@
-latero-graphics-studio
-----------------------
+# latero-graphics-studio
+
 A program that allows editing of 2D tactile graphics rendered using the latero-graphics library.
 
 The Latero device is distributed by the not-for-profit organization Tactile Labs Inc. (http://tactilelabs.com).
@@ -8,6 +8,7 @@ Videos of the device in action, as well as a list of related publications, can b
 Please refer to Vincent Levesque's 2009 Ph.D. thesis "Virtual Display of Tactile Graphics and Braille by Lateral Skin Deformation" for an in-depth report on the design, implementation and experimental evaluation of multiple tactile renders developped specifically for the STReSS device: http://vlevesque.com/go/phd.html
 
 This software is part of a set of libraries and programs, all under the terms of the GNU General Public License or the GNU Lesser General Public License. A partial list of related libraries and programs consists of:
+
 - latero: the low level driver for the Latero device
 - latero-gui: a gui that allows the individual testing of the actuators
 - latero-graphics: a library for tactile rendering
@@ -17,3 +18,26 @@ This software is part of a set of libraries and programs, all under the terms of
 - latero-graphics-studio: a program that allows editing of 2D tactile graphics rendered using the latero-graphics library
 
 See OpenLatero.org for more information.
+
+## Installation
+
+### MacOS
+
+Tested on MacOS Tahoe 26.3.1.
+
+Install the latero and latero-graphics libraries.
+
+Build the app:
+```
+cmake --preset default
+cmake --build build
+```
+
+Run the app:
+```
+build/src/latero-graphics-studio
+```
+
+## Authors
+
+Vincent Levesque <vleves@cim.mcgill.ca>
