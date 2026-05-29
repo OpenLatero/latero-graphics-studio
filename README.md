@@ -6,7 +6,9 @@ A program that allows editing of 2D tactile graphics rendered using the latero-g
 
 ### MacOS
 
-Install the latero and latero-graphics libraries.
+#### Install OpenLatero libraries
+
+Install the [latero](https://github.com/OpenLatero/latero) and [latero-graphics](https://github.com/OpenLatero/latero-graphics) libraries.
 
 #### Build and run the app
 
