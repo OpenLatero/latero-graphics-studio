@@ -6,8 +6,6 @@ A program that allows editing of 2D tactile graphics rendered using the latero-g
 
 ### MacOS
 
-Tested on MacOS Tahoe 26.3.1.
-
 Install the latero and latero-graphics libraries.
 
 #### Build and run the app
