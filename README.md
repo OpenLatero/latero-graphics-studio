@@ -10,15 +10,25 @@ Tested on MacOS Tahoe 26.3.1.
 
 Install the latero and latero-graphics libraries.
 
-Build the app:
+#### Build and run the app
+
+The app can be compiled with the following commands:
+
 ```
 cmake --preset default
 cmake --build build
 ```
 
-Run the app:
+and ran with this command:
+
 ```
 build/src/latero-graphics-studio
+```
+
+or in a single command:
+
+```
+cmake --preset default && cmake --build build && build/src/latero-graphics-studio
 ```
 
 ## Authors
