@@ -61,7 +61,7 @@ void ManagerWidget::Close()
 		list_.erase(list_.begin()+page);
 		notebook_.remove_page(page);
 		UpdateCurrentGenerator();
-		preview_.Clear(0xffffffff);
+		preview_.ClearBackground(0xffffffff);
 	}
 }
 
