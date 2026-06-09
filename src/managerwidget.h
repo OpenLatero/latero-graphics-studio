@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtkmm.h>
-#include <laterographics/virtualsurfacewidget.h>
+#include <laterographics/tactographview.h>
 #include <laterographics/tactileengine.h>
 #include <laterographics/audioengine.h>
 
@@ -22,7 +22,7 @@ protected:
 	void OnPageSwitch(Gtk::Widget* page, guint page_num);
 
 	Gtk::Notebook notebook_;
-	latero::graphics::VirtualSurfaceWidget preview_;
+	latero::graphics::TactographView preview_;
 	latero::graphics::TactileEngine *tEngine_;
 	latero::graphics::AudioEngine *aEngine_;
 	std::vector<latero::graphics::GeneratorPtr> list_;
