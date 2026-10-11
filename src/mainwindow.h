@@ -16,5 +16,6 @@ protected:
 
 	void CreateMenu();
 
+	Gtk::Box mainbox_;
 	ManagerWidget managerWidget_;
 };
