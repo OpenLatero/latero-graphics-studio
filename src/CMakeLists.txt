@@ -2,7 +2,7 @@ set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_FLAGS "--std=gnu++17 -fpermissive ${CMAKE_CXX_FLAGS}")
 
 find_package(Boost REQUIRED COMPONENTS program_options)
-find_package(laterographics 0.1 REQUIRED)
+find_package(laterographics 0.2 REQUIRED)
 
 set(studio_SRCS
     mainwindow.h
